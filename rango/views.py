@@ -1,10 +1,11 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from rango.models import Category
 from rango.models import Page
-from rango.forms import CategoryForm
-from rango.forms import PageForm
+from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     # Obtain the context from the HTTP request.
@@ -113,3 +114,82 @@ def add_page(request, category_name_url):
             {'category_name_url': category_name_url,
              'category_name': category_name, 'form': form},
              context)
+
+def register(request):
+    # Request the context.
+    context = RequestContext(request)
+
+    registered = False
+
+    # If HTTP POST, we wish to process form data and create an account.
+    if request.method == 'POST':
+        # Grab raw form data - making use of both FormModels.
+        user_form = UserForm(data=request.POST)
+        profile_form = UserProfileForm(data=request.POST)
+
+        # Two valid forms?
+        if user_form.is_valid() and profile_form.is_valid():
+            # Save the user's form data. That one is easy.
+            user = user_form.save()
+
+            # Now a user account exists, we hash the password with the set_password() method.
+            # Then we can update the account with .save().
+            user.set_password(user.password)
+            user.save()
+
+            # Now we can sort out the UserProfile instance.
+            # We'll be setting values for the instance ourselves, so commit=False prevents Django from saving the instance automatically.
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            # Profile picture supplied? If so, we put it in the new UserProfile.
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+
+            # Now we save the model instance!
+            profile.save()
+
+            # We can say registration was successful.
+            registered = True
+
+        # Invalid form(s) - just print errors to the terminal.
+        else:
+            print user_form.errors, profile_form.errors
+
+    # Not a HTTP POST, so we render the two ModelForms to allow a user to input their data.
+    else:
+        user_form = UserForm()
+        profile_form = UserProfileForm()
+
+    return render_to_response(
+        'rango/register.html',
+        {'user_form': user_form, 'profile_form':profile_form,'registered':registered},
+        context)
+
+def user_login(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/rango/')
+            else:
+                return HttpResponse('Your Rango account is disabled')
+        else:
+            print "Invalid login details: {0}, {1}.".format(username,password)
+            return HttpResponse("Invalid login details supplied.")
+    else:
+        return render_to_response('rango/login.html',{},context)
+
+@login_required    
+def restricted (request):
+    return HttpResponse("Since you're logged in, you can see this text")
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect('/rango/')
