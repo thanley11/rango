@@ -6,6 +6,7 @@ from rango.models import Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from rango.bing_search import run_query
 
 def index(request):
     # Obtain the context from the HTTP request.
@@ -80,7 +81,20 @@ def add_category(request):
     
     return render_to_response('rango/add_category.html', {'form': form}, context)
 
+def about(request):
+    # Request the context.
+    context = RequestContext(request)
+    context_dict = {}
+    # If the visits session varible exists, take it and use it.
+    # If it doesn't, we haven't visited the site so set the count to zero.
 
+    count = request.session.get('visits',0)
+
+    context_dict['visit_count'] = count
+
+    # Return and render the response, ensuring the count is passed to the template engine.
+    return render_to_response('rango/about.html', context_dict , context)
+	
 def add_page(request, category_name_url):
     context = RequestContext(request)
 
@@ -167,23 +181,39 @@ def register(request):
         context)
 
 def user_login(request):
+    # Obtain our request's context.
     context = RequestContext(request)
+    context_dict = {}
+
+    # If HTTP POST, pull out form data and process it.
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
+
+        # Attempt to log the user in with the supplied credentials.
+        # A User object is returned if correct - None if not.
         user = authenticate(username=username, password=password)
-        
+
+        # A valid user logged in?
         if user is not None:
+            # Check if the account is active (can be used).
+            # If so, log the user in and redirect them to the homepage.
             if user.is_active:
                 login(request, user)
                 return HttpResponseRedirect('/rango/')
+            # The account is inactive; tell by adding variable to the template context.
             else:
-                return HttpResponse('Your Rango account is disabled')
+                context_dict['disabled_account'] = True
+                return render_to_response('rango/login.html', context_dict, context)
+        # Invalid login details supplied!
         else:
-            print "Invalid login details: {0}, {1}.".format(username,password)
-            return HttpResponse("Invalid login details supplied.")
+            print "Invalid login details: {0}, {1}".format(username, password)
+            context_dict['bad_details'] = True
+            return render_to_response('rango/login.html', context_dict, context)
+
+    # Not a HTTP POST - most likely a HTTP GET. In this case, we render the login form for the user.
     else:
-        return render_to_response('rango/login.html',{},context)
+        return render_to_response('rango/login.html', context_dict, context)
 
 @login_required    
 def restricted (request):
@@ -192,4 +222,20 @@ def restricted (request):
 @login_required
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/rango/')
+    return HttpResponseRedirect('/rango/')	
+
+def search(request):
+		context = RequestContext(request)
+		result_list = []
+		
+		if request.method == 'POST':
+			query = request.POST['query'].strip()
+			
+			if query:
+				result_list = run_query(query)
+				
+		return render_to_response('rango/search.html', {'result_list': result_list}, context)
+	
+	
+	
+	
