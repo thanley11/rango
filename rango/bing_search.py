@@ -19,7 +19,7 @@ def run_query(search_terms):
 		query)
 	
 	username = ''
-	bind_api_key = 'VQMSe43qvOZ77oRcVJ10sMINEhqhonI/pemaoz6Vy54'
+	bing_api_key = 'VQMSe43qvOZ77oRcVJ10sMINEhqhonI/pemaoz6Vy54'
 	
 	password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
 	password_mgr.add_password(None, search_url, username, bing_api_key)

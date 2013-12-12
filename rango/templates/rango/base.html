@@ -49,7 +49,18 @@
     <div class="row-fluid">
         <div class="span3">
             <div class="well sidebar-nav">
-                <!--- Empty for the timebeing -->
+				<ul class="nav nav-list">
+					<li>gg</li>
+					<li></li>
+					{% block navbar %}
+					{% endblock %}
+				</ul>
+				
+                 {% if cat_list %}
+                 <div id="cats">
+                         {% include 'rango/category_list.html' %}
+                 </div>
+				{% endif %}
             </div>
             <!--/.well -->
         </div>
