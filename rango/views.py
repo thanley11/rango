@@ -79,34 +79,16 @@ def add_category(request):
     
     return render_to_response('rango/add_category.html', {'form': form}, context)
 
-def about(request):
-    # Request the context.
-	context = RequestContext(request)
-	context_dict = {}
-	
-	cat_list = get_category_list()
-
-	context_dict['cat_list'] = cat_list
-    # If the visits session varible exists, take it and use it.
-    # If it doesn't, we haven't visited the site so set the count to zero.
-	count = request.session.get('visits',0)
-
-	context_dict['visit_count'] = count
-
-    # Return and render the response, ensuring the count is passed to the template engine.
-	return render_to_response('rango/about.html', context_dict , context)
-	
 def add_page(request, category_name_url):
-	context = RequestContext(request)
+    context = RequestContext(request)
 
-	cat_list = get_category_list()
+    cat_list = get_category_list()
 
-	context_dict = {}
+    context_dict = {}
 
-	context_dict['cat_list'] = cat_list
-	
-	category_name = decode_url(category_name_url)
-	
+    context_dict['cat_list'] = cat_list
+    
+    category_name = decode_url(category_name_url)
     
     if request.method == 'POST':
         form = PageForm(request.POST)
@@ -132,23 +114,40 @@ def add_page(request, category_name_url):
             print form.errors
     else:
         form = PageForm()
-	
-	context_dict['category_name_url'] = category_name_url
-	contex_dict['category_name'] = category_name
-	context_dict['form'] = form
+    
+    context_dict['category_name_url'] = category_name_url
+    context_dict['category_name'] = category_name
+    context_dict['form'] = form
 
     return render_to_response( 'rango/add_page.html',
             context_dict,
              context)
 
+def about(request):
+    # Request the context.
+	context = RequestContext(request)
+	context_dict = {}
+	
+	cat_list = get_category_list()
+
+	context_dict['cat_list'] = cat_list
+    # If the visits session varible exists, take it and use it.
+    # If it doesn't, we haven't visited the site so set the count to zero.
+	count = request.session.get('visits',0)
+
+	context_dict['visit_count'] = count
+
+    # Return and render the response, ensuring the count is passed to the template engine.
+	return render_to_response('rango/about.html', context_dict , context)
+	
+
 def register(request):
     # Request the context.
     context = RequestContext(request)
-
-	cat_list = get_category_list()
-	context_dict = {}
-	context_dict['cat_list'] = cat_list
-	
+    cat_list = get_category_list()
+    context_dict = {}
+    context_dict['cat_list'] = cat_list
+    
     registered = False
 
     # If HTTP POST, we wish to process form data and create an account.
@@ -204,10 +203,8 @@ def user_login(request):
     # Obtain our request's context.
     context = RequestContext(request)
     context_dict = {}
-
-	cat_list = get_category_list()
-	
-	context_dict['cat_list'] = cat_list
+    cat_list = get_category_list()
+    context_dict['cat_list'] = cat_list
 	
     # If HTTP POST, pull out form data and process it.
     if request.method == 'POST':
