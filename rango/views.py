@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from rango.bing_search import run_query
 from django.contrib.auth.models import User
-
+from datetime import datetime
 
 def index(request):
     # Obtain the context from the HTTP request.
@@ -19,13 +19,35 @@ def index(request):
 
     for category in category_list:
         category.url = encode_url(category.name)
+        
+    cat_list = get_category_list()
+    context_dict['cat_list'] = cat_list
     # Render the response and send it back!
-	
-	cat_list = get_category_list()
-	context_dict['cat_list'] = cat_list
-	
-    return render_to_response('rango/index.html', context_dict, context)
+    """
+    page_list = Page.object.order_by('-views')[:5]
+    context_dict['pages'] = page_list
+    """
+    response = render_to_response('rango/index.html', context_dict, context)
+    
+    visits = int(request.COOKIES.get('visits','0'))
+    
+    if request.COOKIES.has_key('last_visit'):
+        last_visit = request.COOKIES['last_visit']
+        last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+        
+        if (datetime.now() - last_visit_time).days > 0:
+            response.set_cookie('visit', visits+1)
+            response.set_cookie('last_visit', datetime.now())
+    else:
+        response.set_cookie('last_visit', datetime.now())
 
+        
+    return response
+
+    
+    
+    return render_to_response('rango/index.html', context_dict, context)
+    
 def decode_url(str):
     return str.replace('_',' ')
 
