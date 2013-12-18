@@ -2,7 +2,7 @@ import json
 import urllib, urllib2
 
 def run_query(search_terms):
-	root_url = 'https://api.datamarket.azure.com/Bing/Search'
+	root_url = 'https://api.datamarket.azure.com/Bing/Search/v1/Composite'
 	source = 'Web'
 	
 	results_per_page = 10
@@ -10,6 +10,7 @@ def run_query(search_terms):
 	
 	query = "'{0}'".format(search_terms)
 	query = urllib.quote(query)
+
 	
 	search_url = "{0}{1}?$format=json&$top={2}&$skip={3}&Query={4}".format(
 		root_url,
@@ -17,6 +18,8 @@ def run_query(search_terms):
 		results_per_page,
 		offset,
 		query)
+	
+	
 	
 	username = ''
 	bing_api_key = 'VQMSe43qvOZ77oRcVJ10sMINEhqhonI/pemaoz6Vy54'
@@ -35,7 +38,8 @@ def run_query(search_terms):
 		
 		json_response = json.loads(response)
 		
-		for result in json_response['d']['results']:
+		
+		for result in json_response['d']['hello']:
 			results.append({
 				'title': result['Title'],
 				'link': result['Url'],

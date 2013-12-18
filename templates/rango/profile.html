@@ -1,0 +1,25 @@
+{% extends 'rango/base.html' %}
+{% load static %}
+{% block title %}Welcome to Rango!{% endblock %}
+
+{% block body_block %}
+<div class="hero-unit">
+    {% if user.is_authenticated %}
+    <h3>Rango says... hello {{ user.username }}! </h3>
+    <h4>Your info is</h4>
+    Username: {{ user.username }}
+    <br />
+    Email: {{ user.email }}
+    <br />
+
+    Website: <a href="{{ userprofile.website }}">{{ userprofile.website}}</a>
+    <br />
+
+    Picture: <img src="{{ userprofile.picture.url }}" />
+
+    {% else %}
+    <h1>Rango says... hello world!</h1>
+    {% endif %}
+</div>
+{% endblock %}
+    

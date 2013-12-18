@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, url
 from rango import views
+from django.conf import settings
 
 urlpatterns = patterns('',
         url(r'^$', views.index, name='index'),
@@ -12,4 +13,12 @@ urlpatterns = patterns('',
         url(r'^logout/$', views.user_logout, name="logout"), 
 		url(r'^about/$', views.about, name="about"),
 		url(r'^search/$', views.search, name="search"),
+        url(r'^profile/$', views.profile, name="profile"),
 )
+
+if settings.DEBUG:
+        urlpatterns += patterns(
+                'django.views.static',
+                (r'media/(?P<path>.*)',
+                'serve',
+                {'document_root':settings.MEDIA_ROOT}), )

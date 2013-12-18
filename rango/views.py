@@ -3,10 +3,13 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from rango.models import Category
 from rango.models import Page
+from rango.models import UserProfile
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from rango.bing_search import run_query
+from django.contrib.auth.models import User
+
 
 def index(request):
     # Obtain the context from the HTTP request.
@@ -66,6 +69,12 @@ def get_category_list(max_results=0, starts_with=''):
 def add_category(request):
     context = RequestContext(request)
     
+    cat_list = get_category_list()
+
+    context_dict = {}
+
+    context_dict['cat_list'] = cat_list
+    
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         
@@ -77,7 +86,8 @@ def add_category(request):
     else:
         form = CategoryForm()
     
-    return render_to_response('rango/add_category.html', {'form': form}, context)
+    context_dict['form'] = form
+    return render_to_response('rango/add_category.html', context_dict, context)
 
 def add_page(request, category_name_url):
     context = RequestContext(request)
@@ -142,50 +152,37 @@ def about(request):
 	
 
 def register(request):
-    # Request the context.
     context = RequestContext(request)
     cat_list = get_category_list()
     context_dict = {}
     context_dict['cat_list'] = cat_list
     
     registered = False
-
-    # If HTTP POST, we wish to process form data and create an account.
+    
     if request.method == 'POST':
         # Grab raw form data - making use of both FormModels.
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
-
-        # Two valid forms?
+        
         if user_form.is_valid() and profile_form.is_valid():
-            # Save the user's form data. That one is easy.
             user = user_form.save()
-
-            # Now a user account exists, we hash the password with the set_password() method.
-            # Then we can update the account with .save().
+            
             user.set_password(user.password)
             user.save()
-
-            # Now we can sort out the UserProfile instance.
-            # We'll be setting values for the instance ourselves, so commit=False prevents Django from saving the instance automatically.
+        
             profile = profile_form.save(commit=False)
             profile.user = user
 
-            # Profile picture supplied? If so, we put it in the new UserProfile.
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
 
-            # Now we save the model instance!
             profile.save()
 
-            # We can say registration was successful.
             registered = True
 
-        # Invalid form(s) - just print errors to the terminal.
         else:
             print user_form.errors, profile_form.errors
 
-    # Not a HTTP POST, so we render the two ModelForms to allow a user to input their data.
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
@@ -263,7 +260,22 @@ def search(request):
 		context_dict['result_list'] = result_list
 				
 		return render_to_response('rango/search.html', context_dict, context)
-	
-	
-	
-	
+
+@login_required        
+def profile(request):
+    context = RequestContext(request)
+    context_dict = {}
+    cat_list = get_category_list()
+    context_dict['cat_list'] = cat_list
+    
+    u = User.objects.get(username=request.user)
+    
+    try:
+        up = UserProfile.objects.get(user=u)
+    except:
+        up = None
+        
+    context_dict['user'] = u
+    context_dict['userprofile'] = up
+    return render_to_response('rango/profile.html', context_dict , context)
+        

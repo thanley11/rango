@@ -1,21 +1,40 @@
 # Django settings for tango_with_django_project project.
 import os 
 
+SETTINGS_DIR = os.path.dirname(__file__)
+
+
+
+PROJECT_PATH = os.path.join(SETTINGS_DIR, os.pardir)
+PROJECT_PATH = os.path.abspath(PROJECT_PATH)
+
+TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
+STATIC_PATH = os.path.join(PROJECT_PATH,'static')
+DATABASE_PATH = os.path.join(PROJECT_PATH, 'sqlite.db')
+
+
+
+print "Settings directory:", SETTINGS_DIR
+print "Project root:", PROJECT_PATH
+print "Templates:", TEMPLATE_PATH
+print "Static:", STATIC_PATH
+print "DB:", DATABASE_PATH
+
+
+LOGIN_URL = "/rango/login/"
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
-
 MANAGERS = ADMINS
-
-LOGIN_URL = "/rango/login/"
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'I:\\Tom\\Ex_Files_Java_EssT2\\Exercise Files\\tango_with_django_project\\sqlite.db',                      # Or path to database file if using sqlite3.
+        'NAME': DATABASE_PATH,                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -56,12 +75,12 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -69,7 +88,7 @@ MEDIA_URL = ''
 # Example: "/var/www/example.com/static/"
 STATIC_ROOT = ''
 
-STATIC_PATH = os.path.join(BASE_DIR,'static')
+
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
@@ -97,6 +116,7 @@ SECRET_KEY = 'wq=%-c0laq6h_)+1p#fp@jl#1dit*4&3(j&)h0kwo2=hcf1--8'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
+
 #     'django.template.loaders.eggs.Loader',
 )
 
@@ -116,7 +136,7 @@ ROOT_URLCONF = 'tango_with_django_project.urls'
 WSGI_APPLICATION = 'tango_with_django_project.wsgi.application'
 
 TEMPLATE_DIRS = (
-      os.path.join(BASE_DIR, 'templates'),
+      TEMPLATE_PATH,
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
