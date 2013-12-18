@@ -12,14 +12,11 @@ TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
 STATIC_PATH = os.path.join(PROJECT_PATH,'static')
 DATABASE_PATH = os.path.join(PROJECT_PATH, 'sqlite.db')
 
-
-
 print "Settings directory:", SETTINGS_DIR
 print "Project root:", PROJECT_PATH
 print "Templates:", TEMPLATE_PATH
 print "Static:", STATIC_PATH
 print "DB:", DATABASE_PATH
-
 
 LOGIN_URL = "/rango/login/"
 

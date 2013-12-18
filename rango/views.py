@@ -186,10 +186,11 @@ def register(request):
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
-		
-	context_dict['user_form'] = user_form
-	context_dict['profile_form'] = profile_form
-	context_dict['registered'] = registered
+
+
+    context_dict['user_form'] = user_form
+    context_dict['profile_form'] = profile_form
+    context_dict['registered'] = registered
 
     return render_to_response(
         'rango/register.html',
