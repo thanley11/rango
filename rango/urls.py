@@ -14,6 +14,8 @@ urlpatterns = patterns('',
 		url(r'^about/$', views.about, name="about"),
 		url(r'^search/$', views.search, name="search"),
         url(r'^profile/$', views.profile, name="profile"),
+        url(r'goto/$', views.track_url, name="track_url"),
+        url(r'like_category/$', views.like_category, name="like_category"),
 )
 
 if settings.DEBUG:
