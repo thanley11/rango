@@ -51,15 +51,23 @@
         <div class="span3">
             <div class="well sidebar-nav">
 				<ul class="nav nav-list">
-					<li></li>
-					<li></li>
-					{% block navbar %}
+                    <li></li>
+                    <li></li>
+                    {% block navbar %}
 					{% endblock %}
+                </ul>
+                    
+                <ul class="nav nav-list">
+					<li class ="nav-header">Find a Category</li>
+                    <form>
+                    <label></label>
+					<li><input class="search-query span 10" type="text" name="suggestion" value="" id="suggestion" autocomplete="off" /></li>
+                    </form>
 				</ul>
-				
+
                  {% if cat_list %}
                  <div id="cats">
-                         {% include 'rango/category_list.html' %}
+                         {% include 'rango/category_list.html' with cat_list=cat_list %}
                  </div>
 				{% endif %}
             </div>
