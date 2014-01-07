@@ -8,42 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Category'
-        db.create_table(u'rango_category', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=128)),
-        ))
-        db.send_create_signal(u'rango', ['Category'])
-
-        # Adding model 'Page'
-        db.create_table(u'rango_page', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['rango.Category'])),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('views', self.gf('django.db.models.fields.IntegerField')(default=0)),
-        ))
-        db.send_create_signal(u'rango', ['Page'])
-
-        # Adding model 'UserProfile'
-        db.create_table(u'rango_userprofile', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
-            ('website', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
-            ('picture', self.gf('django.db.models.fields.files.ImageField')(max_length=100, blank=True)),
-        ))
-        db.send_create_signal(u'rango', ['UserProfile'])
+        # Adding field 'Category.likes'
+        db.add_column(u'rango_category', 'likes',
+                      self.gf('django.db.models.fields.IntegerField')(default=0),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting model 'Category'
-        db.delete_table(u'rango_category')
-
-        # Deleting model 'Page'
-        db.delete_table(u'rango_page')
-
-        # Deleting model 'UserProfile'
-        db.delete_table(u'rango_userprofile')
+        # Deleting field 'Category.likes'
+        db.delete_column(u'rango_category', 'likes')
 
 
     models = {
@@ -65,11 +38,7 @@ class Migration(SchemaMigration):
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Group']"}),
-
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
-
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -77,11 +46,7 @@ class Migration(SchemaMigration):
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"}),
-
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
-
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         u'contenttypes.contenttype': {
@@ -94,6 +59,7 @@ class Migration(SchemaMigration):
         u'rango.category': {
             'Meta': {'object_name': 'Category'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'likes': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'})
         },
         u'rango.page': {
