@@ -36,10 +36,39 @@
     {% endif %}
     </div>
     {% if user.is_authenticated %}
-       <a href="/rango/category/{{category_name_url}}/add_page/">Add a Page</a>
+    <a href="/rango/category/{{category_name_url}}/add_page/">Add a Page</a>
     {% endif %}
-</div>
+</div>    
+ <div class="hero-unit">
+    <div class="container-fluid">
+        <p>Search for a page</p>
+        <form class="form-search span8" id="search_form" method="POST" action="/rango/category/{{ category_name_url}}/">
+            {% csrf_token %}
+            <input type="text" class="input-long search-query" size="50" name="query" value="{{ category_name }}" id="query" />
+            <input class = "btn btn-success" type="submit" name="submit" value="Search" />
+            <br/>
+        </form>
+     </div>   
+     <div class="container-fluid">
+        {% if result_list %}
+            <ol>
+            {% for result in result_list %}
+                <li>
+                {% if user.is_authenticated %}
+                <button></button>
+         {% endif %}
+                    <strong><a href="{{ result.link }}">{{ result.title }}</a></strong><br />
+                    <em>{{ result.summary }}</em>
+                </li>
+            {% endfor %}
+            </ol>
+        {% else %}
+            <br />
+            <p>No results found</p>    
+        {% endif %}
+    </div>
 {% else %}
 The category does not exist
 {% endif %}
+</div>
 {% endblock %}
