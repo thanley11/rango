@@ -40,35 +40,38 @@
     {% endif %}
 </div>    
  <div class="hero-unit">
-    <div class="container-fluid">
-        <p>Search for a page</p>
-        <form class="form-search span8" id="search_form" method="POST" action="/rango/category/{{ category_name_url}}/">
-            {% csrf_token %}
-            <input type="text" class="input-long search-query" size="50" name="query" value="{{ category_name }}" id="query" />
-            <input class = "btn btn-success" type="submit" name="submit" value="Search" />
-            <br/>
-        </form>
-     </div>   
-     <div class="container-fluid">
-        {% if result_list %}
-            <ol>
-            {% for result in result_list %}
-                <li>
-                {% if user.is_authenticated %}
-                <button></button>
-         {% endif %}
-                    <strong><a href="{{ result.link }}">{{ result.title }}</a></strong><br />
-                    <em>{{ result.summary }}</em>
-                </li>
-            {% endfor %}
-            </ol>
-        {% else %}
-            <br />
-            <p>No results found</p>    
-        {% endif %}
-    </div>
-{% else %}
-The category does not exist
-{% endif %}
+        <div class="container-fluid">
+            <p>Search for a page</p>
+            <form class="form-search span8" id="search_form" method="POST" action="/rango/category/{{ category_name_url}}/">
+                {% csrf_token %}
+                <input type="text" class="input-long search-query" size="50" name="query" value="" id="query" />
+                <input class = "btn btn-success" type="submit" name="submit" value="Search" />
+                <br/>
+            </form>  
+        </div>
+         <div class="container-fluid">
+            {% if result_list %}
+                <ol>
+                {% for result in result_list %}
+                    <li>
+                    
+                        <strong><a href="{{ result.link }}">{{ result.title }}</a></strong> 
+{% if user.is_authenticated %}
+                     <button id="rango-add" data-catid="{{category.id}}" data-url="{{result.link}}" data-title="{{result.title}}" class="btn btn-mini btn-info" type="button">Add Page</button>
+             {% endif %}
+                        <br />
+                        <p>{{ result.summary }}</p>
+                    </li>
+                {% endfor %}
+                </ol>
+            {% else %}
+                <br />
+                <p>No results found</p>    
+            {% endif %}
+        
+        </div>
+    {% else %}
+    The category does not exist
+    {% endif %}
 </div>
 {% endblock %}

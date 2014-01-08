@@ -72,6 +72,14 @@ def category(request, category_name_url):
     except Category.DoesNotExist:
         pass
     
+    if request.method == 'POST':
+        query = request.POST.get('query')         
+        if query:
+            query = query.strip()
+            result_list = run_query(query)              
+            context_dict['result_list'] = result_list
+    
+    
     return render_to_response('rango/category.html', context_dict, context)
 
 @login_required    
