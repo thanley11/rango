@@ -10,8 +10,12 @@
     This is <strong>Rango's about page</strong>.<br/>
 
     You've visited the site on <strong>{{ visit_count }} occasion(s).</strong><br/>
-
+    
+    {% if static %}
     Here's a picture of you!<br/>
-    <img src="{% static "photo.jpg" %}" alt="Picture of Tom" />
+    <img src="{% static "photo.jpg" %}" alt="Picture of you" />
+    {% else %}
+  Nothing
+    {% endif %}
 </div>
 {% endblock %}
