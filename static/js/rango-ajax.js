@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    
+    
     $('#likes').click(function(){
     var catid;
     catid = $(this).attr("data-catid");
@@ -8,6 +10,7 @@ $(document).ready(function() {
             });
     });
     
+            
             $('#suggestion').keyup(function(){
                 var query;
                 query = $(this).val();
@@ -16,7 +19,8 @@ $(document).ready(function() {
                 });
         });
         
-            $('#rango-add').click(function(){
+            
+            $('.rango-add').click(function(){
                 var catid = $(this).attr("data-catid");
                 var url = $(this).attr("data-url");
                 var title = $(this).attr("data-title");
