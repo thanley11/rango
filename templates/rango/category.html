@@ -41,13 +41,12 @@
 </div>    
  <div class="hero-unit">
         <div class="container-fluid">
-            <p>Search for a page</p>
-            <form class="form-search span8" id="search_form" method="POST" action="/rango/category/{{ category_name_url}}/">
-                {% csrf_token %}
-                <input type="text" class="input-long search-query" size="50" name="query" value="" id="query" />
-                <input class = "btn btn-success" type="submit" name="submit" value="Search" />
-                <br/>
-            </form>  
+         <p>Search for a page.</p>
+                <form class="span8 form-search" id="search_form" method="post" action="/rango/category/{{ category_name_url }}/">
+                        {% csrf_token %}
+                        <input type="text" class="input-long search-query" name="query" value="{{ category_name }}" id="query" />
+                        <button type="submit" class="btn btn-success" name="submit" value="Search">Search</button>
+                </form>
         </div>
          <div class="container-fluid">
 		{% if result_list %}
