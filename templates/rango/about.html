@@ -6,16 +6,17 @@
 
 {% block body_block %}
 <div class="hero-unit">
-    <h1>About Rango</h1>
-    This is <strong>Rango's about page</strong>.<br/>
-
+    <h1>Tom's Django page</h1>
+    This is <strong>the about page</strong>.<br/>
+    <p> I created this site by following the Tango with Django tutorial</p>
+    <p> Thanks for visiting</p>
     You've visited the site on <strong>{{ visit_count }} occasion(s).</strong><br/>
-    
+
     {% if static %}
     Here's a picture of you!<br/>
     <img src="{% static "photo.jpg" %}" alt="Picture of you" />
     {% else %}
-  Nothing
+
     {% endif %}
 </div>
 {% endblock %}

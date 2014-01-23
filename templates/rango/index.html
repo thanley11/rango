@@ -4,11 +4,11 @@
 
 {% block body_block %}
 <div class="hero-unit">
-    
+
     {% if user.is_authenticated %}
-    <h1>Rango says... hello {{ user.username }}! </h1>
+    <h1>Hello {{ user.username }}! </h1>
     {% else %}
-    <h1>Rango says... hello world!</h1>
+    <h1>Welcome to my Django page</h1>
     {% endif %}
  </div>
 <div class="row-fluid">
@@ -30,8 +30,8 @@
         <ul>
             {% for page in pages %}
             {% if page.views <= 1 %}
-            <li><a href="{{ page.url }}">{{ page.title }}</a> - {{ page.category }} ({{ page.views }} view)</li> 
-            {% endif %}            
+            <li><a href="{{ page.url }}">{{ page.title }}</a> - {{ page.category }} ({{ page.views }} view)</li>
+            {% endif %}
             {% if page.views > 1 %}
             <li><a href="{{ page.url }}">{{ page.title }}</a> - {{ page.category }} ({{ page.views }} views)</li>
             {% endif %}
@@ -41,6 +41,6 @@
     <strong>No pages at present. </strong>
     {% endif %}
     </div>
-    
+
 </div>
 {% endblock %}

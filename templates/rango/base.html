@@ -35,7 +35,6 @@
                </ul>
                <ul class="nav">
                    {% if user.is_authenticated %}
-                    <li><a href="/rango/restricted/">Restricted</a></li>
                     <li><a href="/rango/add_category/">Add Category</a></li>
                    {% endif %}
                    <li><a href="/rango/about/">About</a></li>
@@ -69,7 +68,8 @@
                          {% include 'rango/category_list.html' with cat_list=cat_list %}
                  </div>
 				{% endif %}
-            </div>
+                <li> <a href="/rango/scramble/">New scramble </a></li>
+                </div>
             <!--/.well -->
         </div>
         <!--/span-->
