@@ -4,7 +4,10 @@ from rango.models import Category, Page, UserProfile
 
 class PageAdmin(admin.ModelAdmin):
 
-    list_display = ("category","title","url","views")
+    list_display = ("title","url","category","views",)
+    #connects to models
+    ordering = ['-views']
+
     
 admin.site.register(Category)
 admin.site.register(Page, PageAdmin)
