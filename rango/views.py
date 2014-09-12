@@ -316,7 +316,7 @@ def search(request):
 
         context_dict['result_list'] = result_list
 
-        return render_to_response('search.html', context_dict, context)
+        return render_to_response('rango/search.html', context_dict, context)
 
 @login_required
 def profile(request):
@@ -334,7 +334,7 @@ def profile(request):
 
     context_dict['user'] = u
     context_dict['userprofile'] = up
-    return render_to_response('profile.html', context_dict , context)
+    return render_to_response('rango/profile.html', context_dict , context)
 
 def track_url(request):
     context = RequestContext(request)

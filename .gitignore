@@ -6,3 +6,4 @@ book/_build/
 *.tmpproj
 *.db
 .DS_Store
+.ropeproject/
