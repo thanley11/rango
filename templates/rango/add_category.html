@@ -7,7 +7,7 @@
 		<h1>Add a category</h1>
 		<br />
 		<div class="container">
-		<form class="span 6" id="category_form" method="post" action="/rango/add_category/">
+		<form class="span 6" id="category_form" method="post" action="/add_category/">
 		
 			{% csrf_token %}
 			{% for hidden in form.hidden_fields %}

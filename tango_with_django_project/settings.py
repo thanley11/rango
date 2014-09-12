@@ -1,5 +1,5 @@
 # Django settings for tango_with_django_project project.
-import os 
+import os
 
 SETTINGS_DIR = os.path.dirname(__file__)
 
@@ -10,7 +10,7 @@ PROJECT_PATH = os.path.abspath(PROJECT_PATH)
 
 TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
 STATIC_PATH = os.path.join(PROJECT_PATH,'static')
-DATABASE_PATH = os.path.join(PROJECT_PATH, 'sqlite.db')
+DATABASE_PATH = os.path.join(PROJECT_PATH, 'rangodb')
 
 print "Settings directory:", SETTINGS_DIR
 print "Project root:", PROJECT_PATH
@@ -30,12 +30,11 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': DATABASE_PATH,                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'rangodb',                      # Or path to database file if using sqlite3.
+        'USER': 'guest',
+        'PASSWORD': 'monkey',
+        'HOST': 'localhost',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
     }
 }
@@ -107,7 +106,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'wq=%-c0laq6h_)+1p#fp@jl#1dit*4&3(j&)h0kwo2=hcf1--8'
+SECRET_KEY = os.environ['RANGO_SECRET_KEY']
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -150,7 +149,6 @@ INSTALLED_APPS = (
     'south',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    'south',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
